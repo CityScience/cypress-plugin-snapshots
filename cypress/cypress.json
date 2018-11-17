@@ -3,6 +3,7 @@
   "video": false,
   "ignoreTestFiles": [
     "**/*.snap",
-    "**/__snapshot__/*"
+    "**/__snapshot__/*",
+    "**/__image_snapshots__/*"
   ]
 }
