@@ -1,5 +1,6 @@
 /* globals Cypress, before, after, cy */
 /* eslint-env browser */
+var canonizingSerializer = new (require('dom-compare').XMLSerializer)();
 function getTest() {
   return Cypress.mocha.getRunner().test;
 }
@@ -50,7 +51,7 @@ function getSubject(testSubject) {
     }
 
     if (isElement(testSubject)) {
-      return testSubject.outerHTML;
+       return canonizingSerializer.serializeToString(testSubject);
     }
   }
 
