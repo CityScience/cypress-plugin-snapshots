@@ -5,6 +5,7 @@ const {
   getSnapshotFilename,
   snapshotTitleIsUsed,
 } = require('../utils/snapshots');
+var canonizingSerializer = new (require('dom-compare').XMLSerializer)();
 const {
   CONFIG_KEY
 } = require('../config');
@@ -110,7 +111,7 @@ function getSubject(testSubject) {
     }
 
     if (isElement(testSubject)) {
-      return testSubject.outerHTML;
+       return canonizingSerializer.serializeToString(testSubject);
     }
   }
 

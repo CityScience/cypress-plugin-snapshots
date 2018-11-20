@@ -103,10 +103,14 @@ function subjectToSnapshot(subject, dataType = TYPE_JSON) {
         result = JSON.stringify(result, undefined, 2);
       }
 
-      result = prettier.format(result.trim(), prettierConfig).trim();
+      result = prettier.format(result.trim(), prettierConfig);
     } catch(err) {
       throw new Error(`Cannot format subject: ${result}`);
     }
+  }
+  
+  if (typeof result !== 'object'){
+    result = result.trim();
   }
 
   return result;
