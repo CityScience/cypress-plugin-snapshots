@@ -51,6 +51,7 @@ function getSubject(testSubject) {
     return testSubject.map(getSubject);
   }
 
+  return testSubject;
 }
 
 function isJQuery(subject) {
