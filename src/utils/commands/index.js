@@ -28,31 +28,27 @@ function isCollection(obj) {
 }
 
 function getSubject(testSubject) {
-  if (testSubject) {
-    if (isJQuery(testSubject)) {
-      if (testSubject.length === 1) {
-        return getSubject(testSubject.get(0));
-      }
+  if (!testSubject) {
+    return testSubject;
+  }
 
-      if (testSubject.length > 1) {
-        return getSubject(Array.from(testSubject));
-      }
+  if (isElement(testSubject)) {
+     return canonizingSerializer.serializeToString(testSubject);
+  }
 
-      return undefined;
+  if (isJQuery(testSubject)) {
+    if (testSubject.length === 1) {
+      return getSubject(testSubject.get(0));
     }
+    return Array.from(testSubject).map(getSubject);
+  }
 
-    if (isCollection(testSubject)) {
-      return getSubject(Array.from(testSubject));
-    }
+  if (isCollection(testSubject)) {
+    return Array.from(testSubject).map(getSubject);
+  }
 
-    const isArray = !isJQuery && Array.isArray(testSubject);
-    if (isArray && testSubject.length && isElement(testSubject[0])) {
-      return testSubject.map(getSubject);
-    }
-
-    if (isElement(testSubject)) {
-       return canonizingSerializer.serializeToString(testSubject);
-    }
+  if (Array.isArray(testSubject)) {
+    return testSubject.map(getSubject);
   }
 
   return testSubject;
