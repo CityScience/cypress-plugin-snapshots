@@ -2,6 +2,9 @@
 
 (function () {
   function htmlEncode(subject) {
+    if(Array.isArray(subject)) {
+        return subject.map(htmlEncode);
+    }
     return typeof subject === 'string' ?
         subject.replace(/</g, '&lt;').replace(/>/g, '&gt;')
       : JSON.stringify(subject, undefined, 2);
