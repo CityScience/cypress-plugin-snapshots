@@ -60,8 +60,12 @@ function getSnapshot(filename, snapshotTitle, dataType = TYPE_JSON) {
 
   if (fs.existsSync(filename)) {
     const snapshots = readFile(filename);
-    if (snapshots[snapshotTitle]) {
-      return subjectToSnapshot(snapshots[snapshotTitle], dataType);
+    let value = snapshots[snapshotTitle];
+    if (value) {
+      if (typeof value === 'string') {
+        value = value.trim(); // strip formatting added in updateSnapshot
+      }
+      return subjectToSnapshot(value, dataType);
     }
   } else {
     fs.writeFileSync(filename, '{}');
