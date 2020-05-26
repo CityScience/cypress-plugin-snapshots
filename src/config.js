@@ -1,5 +1,5 @@
 const crypto = require('crypto');
-const { merge, cloneDeep, clone } = require('lodash');
+const { merge, cloneDeep, clone, get } = require('lodash');
 const { TYPE_JSON } = require('./dataTypes');
 
 function createToken() {
@@ -67,29 +67,21 @@ function getConfig() {
 }
 
 function getImageConfig(options = {}) {
-  return Object.keys(DEFAULT_IMAGE_CONFIG)
-    .filter((key) => options.imageConfig && options.imageConfig[key] !== undefined)
-    .reduce(
-      (imageConfig, key) => {
-        imageConfig[key] = options.imageConfig[key];
-        return imageConfig;
-      },
-      merge({}, DEFAULT_IMAGE_CONFIG, getConfig().imageConfig)
-    );
+  return merge(
+    {},
+    DEFAULT_IMAGE_CONFIG, // plugin defaults
+    options.imageConfig, // external config (cypress.json, command line args)
+    get(options.taskOptions, 'imageConfig') // options passed into the command
+  );
 }
 
-
 function getScreenshotConfig(options = {}) {
-  const screenshotConfig = Object.keys(DEFAULT_SCREENSHOT_CONFIG)
-    .filter((key) => options && options[key] !== undefined)
-    .reduce(
-      (imageConfig, key) => {
-        imageConfig[key] = options[key];
-        return imageConfig;
-      },
-      merge({}, DEFAULT_SCREENSHOT_CONFIG, getConfig().screenshotConfig)
-    );
-
+  const screenshotConfig = merge(
+    {},
+    DEFAULT_SCREENSHOT_CONFIG, // plugin defaults
+    options.screenshotConfig, // external config (cypress.json, command line args)
+    options.taskOptions // options passed into the command
+  );
   screenshotConfig.blackout = (screenshotConfig.blackout || []);
   screenshotConfig.blackout.push('.snapshot-diff');
   return screenshotConfig;
