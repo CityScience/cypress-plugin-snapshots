@@ -18,7 +18,7 @@ function addCommand(commandName, method) {
       return commandSubject;
     }
 
-    const options = merge({}, cloneDeep(getConfig()), taskOptions);
+    const options = merge({}, cloneDeep(getConfig()), taskOptions, { taskOptions });
     return cy.wrap(commandSubject, NO_LOG)
       .then((subject) => method(subject, options));
   });
